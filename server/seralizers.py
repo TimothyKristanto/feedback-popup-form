@@ -1,0 +1,26 @@
+from models.feedback import *
+from sqlalchemy.ext.asyncio import async_sessionmaker, AsyncSession
+from sqlalchemy import select
+from schemas import FeedbackModel
+
+# async session is important to manage the database
+class Serializers:
+    async def get_all_data(self, async_session: async_sessionmaker[AsyncSession]):
+        async with async_session() as session:
+            statement = select(Feedback).order_by(Feedback.date_created)
+
+            result = await session.execute(statement)
+
+            return result.scalars().all() # return the data as list of items
+        
+    async def add_data(self, async_session: async_sessionmaker[AsyncSession], feedback: Feedback):
+        async with async_session() as session:
+            session.add(feedback)
+            await session.commit()
+
+    # async def add_data(self, async_session: async_sessionmaker[AsyncSession], feedback_model: FeedbackModel):
+    #     async with async_session() as session:
+    #         feedback = Feedback(**feedback_model.model_dump())
+
+    #         session.add(feedback)
+    #         await session.commit()
