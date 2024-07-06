@@ -1,20 +1,33 @@
 from fastapi import FastAPI
-from seralizers import *
+from serializers import *
 from sqlalchemy.ext.asyncio import async_sessionmaker
 from db import engine
 from schemas import *
 from typing import List
 from models.feedback import *
 from http import HTTPStatus
+from starlette.middleware.cors import CORSMiddleware
 
-# give an API documentation design
+# Transform the page into an API documentation
 app = FastAPI(
     title="Feedback Form API",
     description="API for the feedback form popup MultitudeX technical test",
     docs_url="/"
 )
 
-# declare async session
+origins = [
+    "http://localhost",
+    "http://localhost:8080",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 session = async_sessionmaker(
     bind=engine,
     expire_on_commit=False
@@ -22,11 +35,11 @@ session = async_sessionmaker(
 
 db = Serializers()
 
-# get all the feedbacks
-@app.get("/feedbacks", response_model=List[FeedbackModel])
+# get all the feedbacks from the database
+@app.get("/feedbacks")
 async def get_feedbacks():
-    feedbacks = await db.get_all_data(session)
-    return feedbacks
+    feedbacks = await db.get_all_data(session) 
+    return feedbacks # return the feedbacks in the form of JSON
 
 # add new feedback
 @app.post("/feedbacks", status_code=HTTPStatus.CREATED)

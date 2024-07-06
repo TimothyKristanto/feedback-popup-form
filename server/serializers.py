@@ -1,7 +1,6 @@
 from models.feedback import *
 from sqlalchemy.ext.asyncio import async_sessionmaker, AsyncSession
 from sqlalchemy import select
-from schemas import FeedbackModel
 
 # async session is important to manage the database
 class Serializers:
@@ -17,10 +16,3 @@ class Serializers:
         async with async_session() as session:
             session.add(feedback)
             await session.commit()
-
-    # async def add_data(self, async_session: async_sessionmaker[AsyncSession], feedback_model: FeedbackModel):
-    #     async with async_session() as session:
-    #         feedback = Feedback(**feedback_model.model_dump())
-
-    #         session.add(feedback)
-    #         await session.commit()

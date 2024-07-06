@@ -17,7 +17,7 @@
           <h1>Thank you for filling the survey</h1>
         </div>
         
-        <button v-if="progress == 1 && rating != 0" class="btn btn-primary w-25 mt-4" @click="progress = 2">Submit</button>
+        <button v-if="progress == 1 && rating != 0" class="btn btn-primary w-25 mt-4" @click="submitFeedback">Submit</button>
         <button v-if="progress == 2" class="btn btn-primary w-25" @click="closePopup">Close</button>
       </div>
     </div>
@@ -61,6 +61,13 @@
       },
       closePopup() {
         this.$emit("close-popup")
+      },
+      submitFeedback() {
+        this.$http.post("http://127.0.0.1:8000/feedbacks", {"rating": this.rating})
+        .then(response => {
+          console.log(response)
+          this.progress = 2
+        })
       }
     }
   }
