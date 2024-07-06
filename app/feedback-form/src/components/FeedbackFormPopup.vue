@@ -60,7 +60,7 @@
         return require("../assets/" + dir)
       },
       closePopup() {
-        this.$emit("closePopup")
+        this.$emit("close-popup")
       }
     }
   }
