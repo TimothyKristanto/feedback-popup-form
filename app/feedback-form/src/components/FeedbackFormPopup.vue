@@ -27,12 +27,12 @@
   export default {
     data () {
       return {
-        question: "How would you rate your satisfaction with our product?",
-        progress: 1,
-        max: 2,
-        rating: 0,
-        stars: [
-          {"id":1, "image": "star.svg"},
+        question: "How would you rate your satisfaction with our product?", // represents the question inside the feedback form progress
+        progress: 1, // represents the current feedback form progress
+        max: 2, // represents the max feedback form progress
+        rating: 0, // represents the rating from the user
+        stars: [ // represents the star images in the feedback form, each star has an id
+          {"id":1, "image": "star.svg"}, 
           {"id":2, "image": "star.svg"},
           {"id":3, "image": "star.svg"},
           {"id":4, "image": "star.svg"},
@@ -41,32 +41,40 @@
       }
     },
     methods: {
+      // to change the rating when one of the star buttons pressed
       changeRating(rate) {
-        this.rating = rate
-        this.changeStarImage(rate)
+        this.rating = rate // change the rating based on the rate value
+        this.changeStarImage(rate) // change the star images
       },
       changeStarImage(hoveredStarId) {
         this.stars.forEach(star => {
           if (star.id <= hoveredStarId) {
-            star.image = "star-fill.svg"
+            // change the star image to star-fill.svg if the star id is lower or equal to the hovered or clicked star id
+            // because we only want to block all the the star images which star id is lower or equal to the hovered or clicked star id
+            star.image = "star-fill.svg" 
           } else {
             if (star.id > this.rating) {
+              // we do not want to block the star images if their star id is lower or equal to the hovered or clicked star id
+              // thus we change the star image to star.svg
               star.image = "star.svg"
             }
           }
         });
       },
+      // get an image based on a certain directory
       getImageByDirectory(dir) {
-        return require("../assets/" + dir)
+        return require("../assets/" + dir) // return the image acquired from the specified directory
       },
+      // call parent closePopup function
       closePopup() {
         this.$emit("close-popup")
       },
+      // call the api to submit the feedback
       submitFeedback() {
-        this.$http.post("http://127.0.0.1:8000/feedbacks", {"rating": this.rating})
+        this.$http.post("http://127.0.0.1:8000/feedbacks", {"rating": this.rating}) // call the API with post method
         .then(response => {
           console.log(response)
-          this.progress = 2
+          this.progress = 2 // change the feedback form progress to 2 to indicate that the user has already finished filling the form
         })
       }
     }

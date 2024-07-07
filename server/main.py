@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from serializers import *
+from create_read_data import *
 from sqlalchemy.ext.asyncio import async_sessionmaker
 from db import engine
 from schemas import *
@@ -38,16 +38,18 @@ db = Serializers()
 # get all the feedbacks from the database
 @app.get("/feedbacks")
 async def get_feedbacks():
-    feedbacks = await db.get_all_data(session) 
+    feedbacks = await db.get_all_data(session) # get all the feedbacks data from the database
     return feedbacks # return the feedbacks in the form of JSON
 
 # add new feedback
 @app.post("/feedbacks", status_code=HTTPStatus.CREATED)
 async def add_feedback(feedback_data: CreateFeedbackModel):
+    # make a Feedback model to contain the feedback data
     new_feedback = Feedback(
         rating = feedback_data.rating
     )
 
-    feedbacks = await db.add_data(session, new_feedback)
+    feedbacks = await db.add_data(session, new_feedback) # add the data to the databsae
 
     return feedbacks
+    

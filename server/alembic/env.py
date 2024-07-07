@@ -12,7 +12,7 @@ from models.feedback import *
 import os
 from dotenv import load_dotenv
 
-# load dotenv file found
+# load dotenv file found in the specified directory
 load_dotenv("../")
 
 # this is the Alembic Config object, which provides

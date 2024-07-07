@@ -1,8 +1,8 @@
 <template>
   <div class="full-screen bg-light">
     <feedback-form-popup v-if="showFormPopup" @close-popup="closePopup"></feedback-form-popup>
-    <div class="d-flex flex-column w-100 h-100 justify-content-center align-items-center" v-else>
-      <button @click="showFormPopup = true" class="btn btn-primary">Fill Feedback Form</button>
+    <div class="d-flex flex-column w-100 h-100 align-items-center" v-else>
+      <button @click="showFormPopup = true" class="btn btn-primary mt-5">Fill Feedback Form</button>
       <table class="table table-striped mt-4 w-75 shadow">
         <thead>
           <tr>
@@ -28,28 +28,30 @@
 import FeedbackFormPopup from './components/FeedbackFormPopup.vue';
 
 export default {
-  components: { FeedbackFormPopup },
+  components: { FeedbackFormPopup }, // use the FeedbackFormPopup as component in this page
   data () {
     return {
-        showFormPopup: false,
-        feedbacks: []
+        showFormPopup: false, // to define whether we enable the popup form or not
+        feedbacks: [] // to define the feedbacks data which will be shown inside the table
       }
   },
   methods: {
+    // get all the feedback data from the API
     getFeedbackData() {
-      this.$http.get("http://127.0.0.1:8000/feedbacks")
+      this.$http.get("http://127.0.0.1:8000/feedbacks") // call the API with get method
         .then(response => {
           console.log(response.body);
-          this.feedbacks = response.body
+          this.feedbacks = response.body // put the feedback data inside feedbacks variable
         })
     },
+    // close the popup and update the feedback data
     closePopup() {
-      this.showFormPopup = false
-      this.getFeedbackData()
+      this.showFormPopup = false // close the popup
+      this.getFeedbackData() // update the feedback data
     }
   },
   mounted() {
-    this.getFeedbackData()
+    this.getFeedbackData() // get all the feedback data on app mounted
   }
 }
 </script>
