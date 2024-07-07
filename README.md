@@ -14,6 +14,10 @@
 4. Go back to the root directory using `cd ../..` and type the below commands in your terminal:
     - `cd server`
     - `pip install -r requirements.txt`
+5. Install and set up postgre SQL locally
+6. Create .env file inside the server directory
+7. Type the code below inside the .env file:
+    - `DATABASE_URL=postgresql+asyncpg://your_postgre_username:password@localhost/database_name`
 
 ## Running the application
 1. Go to your terminal or command prompt
