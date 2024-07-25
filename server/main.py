@@ -36,6 +36,11 @@ session = async_sessionmaker(
 db = Serializers()
 
 # get all the feedbacks from the database
+@app.get("/feedbacks/{id}")
+async def get_feedback_by_id(id: int):
+    feedback = await db.get_data_by_id(session, id) # get all the feedbacks data from the database
+    return feedback # return the feedbacks in the form of JSON
+
 @app.get("/feedbacks")
 async def get_feedbacks():
     feedbacks = await db.get_all_data(session) # get all the feedbacks data from the database
@@ -46,10 +51,14 @@ async def get_feedbacks():
 async def add_feedback(feedback_data: CreateFeedbackModel):
     # make a Feedback model to contain the feedback data
     new_feedback = Feedback(
-        rating = feedback_data.rating
+        id = feedback_data.id,
+        rating = feedback_data.rating,
     )
 
-    feedbacks = await db.add_data(session, new_feedback) # add the data to the databsae
+    # existing_feedback = await db.get_data_by_id(new_feedback.id)
+
+    
+    feedbacks = await db.add_data(session, new_feedback) # add the data to the database
 
     return feedbacks
     

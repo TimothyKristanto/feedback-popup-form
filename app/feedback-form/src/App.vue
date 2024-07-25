@@ -1,8 +1,13 @@
 <template>
   <div class="full-screen bg-light">
-    <feedback-form-popup v-if="showFormPopup" @close-popup="closePopup"></feedback-form-popup>
+    <feedback-form-popup
+      v-if="showFormPopup"
+      @close-popup="closePopup"
+    ></feedback-form-popup>
     <div class="d-flex flex-column w-100 h-100 align-items-center" v-else>
-      <button @click="showFormPopup = true" class="btn btn-primary mt-5">Fill Feedback Form</button>
+      <button @click="showFormPopup = true" class="btn btn-primary mt-5">
+        Fill Feedback Form
+      </button>
       <table class="table table-striped mt-4 w-75 shadow">
         <thead>
           <tr>
@@ -25,40 +30,41 @@
 </template>
 
 <script>
-import FeedbackFormPopup from './components/FeedbackFormPopup.vue';
+import FeedbackFormPopup from "./components/FeedbackFormPopup.vue";
 
 export default {
   components: { FeedbackFormPopup }, // use the FeedbackFormPopup as component in this page
-  data () {
+  data() {
     return {
-        showFormPopup: false, // to define whether we enable the popup form or not
-        feedbacks: [] // to define the feedbacks data which will be shown inside the table
-      }
+      showFormPopup: false, // to define whether we enable the popup form or not
+      feedbacks: [], // to define the feedbacks data which will be shown inside the table
+    };
   },
   methods: {
     // get all the feedback data from the API
     getFeedbackData() {
-      this.$http.get("http://127.0.0.1:8000/feedbacks") // call the API with get method
-        .then(response => {
+      this.$http
+        .get("http://127.0.0.1:8000/feedbacks") // call the API with get method
+        .then((response) => {
           console.log(response.body);
-          this.feedbacks = response.body // put the feedback data inside feedbacks variable
-        })
+          this.feedbacks = response.body; // put the feedback data inside feedbacks variable
+        });
     },
     // close the popup and update the feedback data
     closePopup() {
-      this.showFormPopup = false // close the popup
-      this.getFeedbackData() // update the feedback data
-    }
+      this.showFormPopup = false; // close the popup
+      this.getFeedbackData(); // update the feedback data
+    },
   },
-  mounted() {
-    this.getFeedbackData() // get all the feedback data on app mounted
-  }
-}
+  created() {
+    this.getFeedbackData(); // get all the feedback data on app mounted
+  },
+};
 </script>
 
 <style>
-  .full-screen {
-    height: 100vh;
-    width: 100%;
-  }
+.full-screen {
+  height: 100vh;
+  width: 100%;
+}
 </style>

@@ -4,6 +4,14 @@ from sqlalchemy import select
 
 # async session is important to manage the database
 class Serializers:
+    async def get_data_by_id(self, async_session: async_sessionmaker[AsyncSession], id: int):
+        async with async_session() as session:
+            statement = select(Feedback).where(Feedback.id == id) # make a statement to select all the feedbacks from the database and order them by data_created column
+
+            result = await session.execute(statement) # execute the statement
+
+            return result.scalars().all() # return the data as list of items
+        
     async def get_all_data(self, async_session: async_sessionmaker[AsyncSession]):
         async with async_session() as session:
             statement = select(Feedback).order_by(Feedback.date_created) # make a statement to select all the feedbacks from the database and order them by data_created column
@@ -16,4 +24,9 @@ class Serializers:
         async with async_session() as session:
             session.add(feedback) # make a session to add the feedback from the parameter to the database
             await session.commit() # send the session
+
+    # async def update_data(self, async_session: async_sessionmaker[AsyncSession], feedback: Feedback):
+    #     async with async_session() as session:
+    #         session.add(feedback) # make a session to add the feedback from the parameter to the database
+    #         await session.commit() # send the session
         
